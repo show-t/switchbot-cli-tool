@@ -1,0 +1,43 @@
+# Rust build artifacts
+/target
+**/*.rs.bk
+
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.dylib
+*.so
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Logs
+*.log
+
+# By Cargo
+Cargo.lock
+
+# dotenv files
+.env
+.env.*
+!.env.sample
+
+# Rust analyzer
+.target/
+
+# output files
+/output
