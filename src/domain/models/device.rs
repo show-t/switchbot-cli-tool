@@ -1,19 +1,5 @@
 use serde::Serialize;
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
-pub struct DeviceId(pub String);
-
-#[derive(Debug, Clone)]
-pub enum Command {
-    TurnOn,
-    TurnOff,
-    SetBrightness(u8),
-    SetColor(String),
-    Custom {
-        name: String,
-        params: Option<serde_json::Value>
-    },
-}
+use super::value_objects::DeviceId;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Device {

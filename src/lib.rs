@@ -1,5 +1,3 @@
-
-
 pub mod domain {
     pub mod repositories {
         mod device_repository;
@@ -8,7 +6,15 @@ pub mod domain {
 
     pub mod models {
         mod device;
-        pub use device::{DeviceId, Command, Device};
+        pub use device::Device;
+
+        mod command;
+        pub use command::Command;
+
+        pub mod value_objects {
+            mod device_id;
+            pub use device_id::DeviceId;
+        }
     }
 }
 
