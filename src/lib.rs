@@ -39,7 +39,7 @@ pub mod application {
 
     pub mod dto {
         mod device_dto;
-        pub use device_dto::DeviceResponseDto;
+        pub use device_dto::*;
     }
 }
 

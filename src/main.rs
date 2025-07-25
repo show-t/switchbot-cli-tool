@@ -4,7 +4,6 @@ use anyhow::{Result, anyhow};
 use switchbot_cli_tool::presentation::cli::{Cli, Commands};
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
 use switchbot_cli_tool::application::ControlDeviceUseCase;
-use switchbot_cli_tool::application::export_devices::export_devices_to_file;
 
 mod config;
 use config::Config;
