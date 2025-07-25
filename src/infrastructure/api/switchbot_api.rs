@@ -2,6 +2,7 @@ use anyhow::{Result, bail};
 use base64::{Engine as _, engine::general_purpose};
 use hmac::{Hmac, Mac};
 use rand::{Rng, distributions::Alphanumeric};
+use reqwest::dns::Resolve;
 use sha2::Sha256;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -12,6 +13,7 @@ use serde::{Deserialize, Serialize};
 use crate::domain::models::Device;
 use crate::domain::models::value_objects::{DeviceId, Command};
 use crate::domain::repositories::DeviceRepository;
+use crate::application::dto::DeviceResponseDto;
 
 pub struct SwitchBotApi {
     pub host: String,

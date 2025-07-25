@@ -20,7 +20,9 @@ async fn main() -> Result<()> {
     match cli.command {
         Commands::DeviceList => {
             let devices = use_case.fetch_devices().await?;
-            _ = export_devices_to_file(&devices, "output/devices.json");
+            devices.into_iter().for_each(|v| println!("{v:?}"));
+
+            // _ = export_devices_to_file(&devices, "output/devices.json");
         }
     }
 
