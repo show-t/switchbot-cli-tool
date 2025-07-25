@@ -46,7 +46,6 @@ pub mod application {
 pub mod presentation {
     pub mod cli {
         mod args;
-        pub use args::CliArgs;
         pub use args::{
             Cli,
             Commands,

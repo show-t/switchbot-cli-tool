@@ -28,8 +28,7 @@ async fn main() -> Result<()> {
 
     Ok(())
 
-    /* let args = CliArgs::parse();
-
+    /* 
     let command = match args.command.as_str() {
         "turn_on" => Command::TurnOn,
         "turn_off" => Command::TurnOff,
@@ -48,9 +47,7 @@ async fn main() -> Result<()> {
                 .transpose()?,
         },
     };
-
     
-
     use_case.execute(DeviceId(args.device), command).await */
 
     //Ok(())
