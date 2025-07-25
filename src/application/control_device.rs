@@ -3,6 +3,7 @@ use anyhow::Result;
 use crate::domain::models::Device;
 use crate::domain::models::value_objects::{DeviceId, Command};
 use crate::domain::repositories::DeviceRepository;
+use crate::application::export_devices::export_devices_to_file;
 use crate::application::dto::DeviceResponseDto;
 
 pub struct ControlDeviceUseCase<'a, R: DeviceRepository> {
@@ -20,8 +21,9 @@ impl <'a, R: DeviceRepository> ControlDeviceUseCase<'a, R> {
 
     pub async fn fetch_devices(&self) -> Result<Vec<DeviceResponseDto>> {
         let devices = self.repo.get_device_list().await?;
-        let dto: Vec<DeviceResponseDto> = devices.into_iter().map(|v| v.into()).collect();
+        let _ = export_devices_to_file(&devices, "output/devices.json");
 
+        let dto: Vec<DeviceResponseDto> = devices.into_iter().map(|v| v.into()).collect();
         Ok(dto)
     }
 }

@@ -38,8 +38,8 @@ pub mod application {
     pub use export_devices::export_devices_to_file;
 
     pub mod dto {
-        mod device_response_dto;
-        pub use device_response_dto::DeviceResponseDto;
+        mod device_dto;
+        pub use device_dto::DeviceResponseDto;
     }
 }
 
