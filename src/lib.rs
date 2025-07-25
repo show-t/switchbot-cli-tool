@@ -49,7 +49,7 @@ pub mod presentation {
         pub use args::CliArgs;
         pub use args::{
             Cli,
-            Commands
+            Commands,
         };
     }
 }

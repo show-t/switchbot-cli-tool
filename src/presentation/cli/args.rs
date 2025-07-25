@@ -24,4 +24,14 @@ pub struct Cli {
 #[derive(Subcommand, Debug)]
 pub enum Commands {
     DeviceList,
+    Exec {
+        #[arg(long)]
+        device: String,
+
+        #[arg(long)]
+        command: String,
+
+        #[arg(long)]
+        value: Option<String>
+    }
 }
