@@ -1,7 +1,6 @@
 use anyhow::Result;
 
-use crate::domain::models::Device;
-use crate::domain::models::value_objects::{DeviceId, Command};
+use crate::domain::models::value_objects::DeviceId;
 use crate::domain::repositories::DeviceRepository;
 use crate::application::export_devices::export_devices_to_file;
 use crate::application::dto::{DeviceResponseDto, ExecuteCommandDto};

@@ -1,5 +1,5 @@
 use clap::Parser;
-use anyhow::{Result, anyhow};
+use anyhow::Result;
 
 use switchbot_cli_tool::presentation::cli::{Cli, Commands};
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
@@ -47,7 +47,7 @@ async fn main() -> Result<()> {
                 .transpose()?,
         },
     };
-    
+
     use_case.execute(DeviceId(args.device), command).await */
 
     //Ok(())

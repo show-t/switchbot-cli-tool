@@ -1,7 +1,7 @@
 use crate::domain::models::Device;
 use std::fs::File;
 use std::io::Write;
-use anyhow::{Context, Result};
+use anyhow::Result;
 
 pub struct DeviceFileWriter;
 

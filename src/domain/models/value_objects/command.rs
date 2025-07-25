@@ -1,4 +1,3 @@
-use serde::Serialize;
 
 #[derive(Debug, Clone)]
 pub enum Command {
