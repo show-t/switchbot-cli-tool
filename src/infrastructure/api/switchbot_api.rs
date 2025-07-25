@@ -106,7 +106,7 @@ struct DeviceDto {
 impl From<DeviceDto> for Device {
     fn from(dto: DeviceDto) -> Self {
         Device {
-            id: DeviceId(dto.device_id),
+            id: DeviceId::new(dto.device_id),
             name: dto.device_name,
             device_type: dto.device_type,
             is_infrared: false,
@@ -126,7 +126,7 @@ struct IrRemoteDto {
 impl From<IrRemoteDto> for Device {
     fn from(dto: IrRemoteDto) -> Self {
         Device {
-            id: DeviceId(dto.device_id),
+            id: DeviceId::new(dto.device_id),
             name: dto.device_name,
             device_type: dto.remote_type,
             is_infrared: true,
@@ -156,7 +156,7 @@ impl DeviceRepository for SwitchBotApi {
     }
 
     async fn send_command(&self, id: &DeviceId, command: &Command) -> Result<()> {
-        let url = self.host.clone() + "/devices/" + &id.0.to_string() + "/commands";
+        let url = self.host.clone() + "/devices/" + &id.value()?.to_string() + "/commands";
 
         let (command_str, parameter, parameter_type) = match command {
             Command::TurnOn => ("turnOn".into(), "default".into(), "command".into()),
