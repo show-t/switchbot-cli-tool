@@ -1,3 +1,6 @@
+mod dto;
+use dto::{DeviceDto, IrRemoteDto};
+
 use anyhow::{Result, bail};
 use base64::{Engine as _, engine::general_purpose};
 use hmac::{Hmac, Mac};
@@ -10,7 +13,7 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
 use crate::domain::models::Device;
-use crate::domain::models::value_objects::{DeviceId, Command};
+use crate::domain::models::value_objects::{Command, DeviceId};
 use crate::domain::repositories::DeviceRepository;
 
 pub struct SwitchBotApi {
@@ -94,47 +97,6 @@ struct DeviceListBody {
     infrared_remote_list: Option<Vec<IrRemoteDto>>,
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct DeviceDto {
-    device_id: String,
-    device_name: String,
-    device_type: String,
-    hub_device_id: String,
-}
-
-impl From<DeviceDto> for Device {
-    fn from(dto: DeviceDto) -> Self {
-        Device {
-            id: DeviceId::new(dto.device_id),
-            name: dto.device_name,
-            device_type: dto.device_type,
-            is_infrared: false,
-            hub_device_id: dto.hub_device_id,
-        }
-    }
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct IrRemoteDto {
-    device_id: String,
-    device_name: String,
-    remote_type: String,
-    hub_device_id: String,
-}
-impl From<IrRemoteDto> for Device {
-    fn from(dto: IrRemoteDto) -> Self {
-        Device {
-            id: DeviceId::new(dto.device_id),
-            name: dto.device_name,
-            device_type: dto.remote_type,
-            is_infrared: true,
-            hub_device_id: dto.hub_device_id,
-        }
-    }
-}
-
 #[derive(Serialize)]
 struct CommandBody {
     command: String,
@@ -180,7 +142,8 @@ impl DeviceRepository for SwitchBotApi {
             command_type: parameter_type,
         };
 
-        let res = self.client
+        let res = self
+            .client
             .post(&url)
             .headers(self.auth_headers()?)
             .json(&body)
