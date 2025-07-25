@@ -1,13 +1,10 @@
 use clap::Parser;
 use anyhow::{Result, anyhow};
 
-use switchbot_cli_tool::presentation::cli::CliArgs;
 use switchbot_cli_tool::presentation::cli::{Cli, Commands};
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
 use switchbot_cli_tool::application::ControlDeviceUseCase;
 use switchbot_cli_tool::application::export_devices::export_devices_to_file;
-use switchbot_cli_tool::domain::models::Command;
-use switchbot_cli_tool::domain::models::value_objects::DeviceId;
 
 mod config;
 use config::Config;

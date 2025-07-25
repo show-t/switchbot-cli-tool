@@ -1,8 +1,8 @@
 use async_trait::async_trait;
 use anyhow::Result;
 
-use crate::domain::models::{Device, Command};
-use crate::domain::models::value_objects::DeviceId;
+use crate::domain::models::Device;
+use crate::domain::models::value_objects::{DeviceId, Command};
 
 #[async_trait]
 pub trait DeviceRepository {

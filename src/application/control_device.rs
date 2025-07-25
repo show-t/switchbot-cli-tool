@@ -1,7 +1,7 @@
 use anyhow::Result;
 
-use crate::domain::models::{Command, Device};
-use crate::domain::models::value_objects::DeviceId;
+use crate::domain::models::Device;
+use crate::domain::models::value_objects::{DeviceId, Command};
 use crate::domain::repositories::DeviceRepository;
 
 pub struct ControlDeviceUseCase<'a, R: DeviceRepository> {

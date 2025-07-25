@@ -8,12 +8,12 @@ pub mod domain {
         mod device;
         pub use device::Device;
 
-        mod command;
-        pub use command::Command;
-
         pub mod value_objects {
             mod device_id;
             pub use device_id::DeviceId;
+
+            mod command;
+            pub use command::Command;
         }
     }
 }
