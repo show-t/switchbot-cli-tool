@@ -2,15 +2,15 @@ use anyhow::Result;
 
 use crate::domain::models::Device;
 use crate::domain::models::value_objects::{DeviceId, Command};
-use crate::domain::repositories::DeviceRepository;
+use crate::domain::repositories::IDeviceRepository;
 use crate::application::export_devices::export_devices_to_file;
 use crate::application::dto::DeviceResponseDto;
 
-pub struct ControlDeviceUseCase<'a, R: DeviceRepository> {
+pub struct ControlDeviceUseCase<'a, R: IDeviceRepository> {
     pub repo: &'a R,
 }
 
-impl <'a, R: DeviceRepository> ControlDeviceUseCase<'a, R> {
+impl <'a, R: IDeviceRepository> ControlDeviceUseCase<'a, R> {
     pub fn new(repo: &'a R) -> Self {
         Self { repo }
     }

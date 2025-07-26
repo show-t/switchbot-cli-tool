@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::domain::models::Device;
 use crate::domain::models::value_objects::{DeviceId, Command};
-use crate::domain::repositories::DeviceRepository;
+use crate::domain::repositories::IDeviceRepository;
 use crate::application::dto::DeviceResponseDto;
 
 pub struct SwitchBotApi {
@@ -145,7 +145,7 @@ struct CommandBody {
 }
 
 #[async_trait]
-impl DeviceRepository for SwitchBotApi {
+impl IDeviceRepository for SwitchBotApi {
     async fn get_device(&self, id: &DeviceId) -> Result<Device> {
         // 仮実装
         Ok(Device {
