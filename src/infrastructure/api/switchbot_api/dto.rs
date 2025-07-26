@@ -67,8 +67,8 @@ impl From<IrRemoteDto> for Device {
 pub(super) struct CommandRequestBody {
     pub(super) command_type: String,
     pub(super) command: String,
-    //pub(super) parameter: Option<Value>,
-    pub(super) parameter: String,
+    pub(super) parameter: Value,
+    //pub(super) parameter: String,
 }
 
 pub(super) type CommandResponse = SwitchbotApiResponse<CommandResponseBody>;

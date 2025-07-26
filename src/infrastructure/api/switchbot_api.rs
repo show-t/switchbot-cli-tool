@@ -7,6 +7,7 @@ use hmac::{Hmac, Mac};
 use rand::{Rng, distributions::Alphanumeric};
 use sha2::Sha256;
 use std::time::{SystemTime, UNIX_EPOCH};
+use serde_json::Value::Number;
 
 use async_trait::async_trait;
 use reqwest::Client;
@@ -109,6 +110,11 @@ impl IDeviceRepository for SwitchBotApi {
                 command_type: "command".into(),
                 command: "turnOff".into(),
                 parameter: "default".into(),
+            },
+            Command::SetBrightness(value) => CommandRequestBody { 
+                command_type: "command".into(), 
+                command: "setBrightness".into(), 
+                parameter: Number(value.get().into()),   
             },
             Command::Custom { name, params } => {
                 todo!("Custom command is not implemented yet");

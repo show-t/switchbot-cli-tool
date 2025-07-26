@@ -1,7 +1,7 @@
 use clap::Parser;
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 
-use switchbot_cli_tool::domain::models::value_objects::Command;
+use switchbot_cli_tool::domain::models::value_objects::{BrightnessValue, Command};
 use switchbot_cli_tool::application::dto::ExecuteCommandDto;
 use switchbot_cli_tool::presentation::cli::{Cli, Commands};
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
@@ -28,8 +28,17 @@ async fn main() -> Result<()> {
 
             let device_id = device;
             let command = match command.as_str() {
-                "turn_on" => Command::TurnOn,
-                "turn_off" => Command::TurnOff,
+                "on" => Command::TurnOn,
+                "off" => Command::TurnOff,
+                "brightness" => Command::SetBrightness(
+                    BrightnessValue::try_from(
+                        values
+                            .as_ref()
+                            .and_then(|v| v.get(0))
+                            .ok_or_else(|| anyhow!("value does not exist"))?
+                            .parse::<u8>()?
+                    )?
+                ), 
                 other => Command::Custom {
                     name: other.to_string(),
                     params: values.unwrap_or_default().into_iter()
