@@ -99,20 +99,22 @@ impl IDeviceRepository for SwitchBotApi {
         let url = self.host.clone() + "/devices/" + &id.value()?.to_string() + "/commands";
         println!("{}", url.clone());
 
-        let (command_type, command, parameter): (String, String, String)  = match command {
-            Command::TurnOn => ("command".into(), "turnOn".into(), "default".into()),
-            Command::TurnOff => ("command".into(), "turnOff".into(), "default".into()),
+        let body = match command {
+            Command::TurnOn => CommandRequestBody {
+                command_type: "command".into(),
+                command: "turnOn".into(),
+                parameter: "default".into(),
+            },
+            Command::TurnOff => CommandRequestBody {
+                command_type: "command".into(),
+                command: "turnOff".into(),
+                parameter: "default".into(),
+            },
             Command::Custom { name, params } => {
                 todo!("Custom command is not implemented yet");
             }
         };
-
-        let body = CommandRequestBody {
-            command_type,
-            command,
-            parameter,
-        };
-
+        
         let req =self.client
             .post(&url)
             .headers(self.auth_headers()?)
