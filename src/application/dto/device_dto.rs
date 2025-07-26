@@ -9,6 +9,15 @@ pub struct ExecuteCommandDto {
     pub command: Command,
 }
 
+impl ExecuteCommandDto {
+    pub fn new(device_id: String, command: Command) -> Self {
+        Self {
+            device_id,
+            command,
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct DeviceResponseDto {
     pub device_id: Result<String>,

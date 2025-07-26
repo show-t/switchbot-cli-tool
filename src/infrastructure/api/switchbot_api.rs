@@ -123,16 +123,20 @@ impl IDeviceRepository for SwitchBotApi {
         let (command_str, parameter, parameter_type) = match command {
             Command::TurnOn => ("turnOn".into(), "default".into(), "command".into()),
             Command::TurnOff => ("turnOff".into(), "default".into(), "command".into()),
-            Command::SetBrightness(level) => {
-                ("setBrightness".into(), level.to_string(), "command".into())
-            }
-            Command::SetColor(color) => ("setColor".into(), color.clone(), "command".into()),
+            // Command::SetBrightness(level) => {
+            //     ("setBrightness".into(), level.to_string(), "command".into())
+            // }
+            // Command::SetColor(color) => ("setColor".into(), color.clone(), "command".into()),
+            // Command::Custom { name, params } => {
+            //     let param = params
+            //         .as_ref()
+            //         .map(|v| v.to_string())
+            //         .unwrap_or_else(|| "default".to_string());
+            //     (name.clone(), param, "command".to_string())
+            // }
             Command::Custom { name, params } => {
-                let param = params
-                    .as_ref()
-                    .map(|v| v.to_string())
-                    .unwrap_or_else(|| "default".to_string());
-                (name.clone(), param, "command".to_string())
+                println!("{params:?}");
+                (name.clone(), "hoge".to_string(), "command".to_string())
             }
         };
 

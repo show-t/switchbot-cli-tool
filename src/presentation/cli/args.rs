@@ -12,13 +12,13 @@ pub struct Cli {
 pub enum Commands {
     DeviceList,
     Exec {
-        #[arg(long)]
+        #[arg(short, long)]
         device: String,
 
-        #[arg(long)]
+        #[arg(short, long)]
         command: String,
 
-        #[arg(long)]
-        value: Option<String>
+        #[arg(short, long, num_args=1..)]
+        values: Option<Vec<String>>
     }
 }
