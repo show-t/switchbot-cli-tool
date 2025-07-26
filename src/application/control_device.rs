@@ -17,8 +17,7 @@ impl <'a, R: IDeviceRepository> ControlDeviceUseCase<'a, R> {
     pub async fn execute(&self, dto: ExecuteCommandDto) -> Result<()>{
         let device_id = DeviceId::new(dto.device_id);
         println!("[ControlDeviceUseCase::execute]: {:?} {:?}", device_id, dto.command);
-        //self.repo.send_command(&device_id, &dto.command).await
-        Ok(())
+        self.repo.send_command(&device_id, &dto.command).await
     }
 
     pub async fn fetch_devices(&self) -> Result<Vec<DeviceResponseDto>> {

@@ -26,7 +26,7 @@ async fn main() -> Result<()> {
         Commands::Exec { device, command, values } => {
             println!("{device:?} {command:?} {values:?}");
 
-            let device_id = "01-202507021553-77385742".into();
+            let device_id = device;
             let command = match command.as_str() {
                 "turn_on" => Command::TurnOn,
                 "turn_off" => Command::TurnOff,
@@ -37,6 +37,7 @@ async fn main() -> Result<()> {
                         .collect()
                 },
             }; 
+
             let _ = use_case.execute(ExecuteCommandDto::new(
                 device_id,
                 command

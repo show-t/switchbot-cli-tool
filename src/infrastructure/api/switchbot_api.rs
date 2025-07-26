@@ -1,5 +1,5 @@
 mod dto;
-use dto::{DeviceDto, IrRemoteDto};
+use dto::{DeviceListResponse, CommandResponse};
 
 use anyhow::{Result, bail};
 use base64::{Engine as _, engine::general_purpose};
@@ -10,11 +10,11 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use async_trait::async_trait;
 use reqwest::Client;
-use serde::{Deserialize, Serialize};
 
 use crate::domain::models::Device;
 use crate::domain::models::value_objects::{DeviceId, Command};
 use crate::domain::repositories::IDeviceRepository;
+use crate::infrastructure::api::switchbot_api::dto::CommandRequestBody;
 
 pub struct SwitchBotApi {
     pub host: String,
@@ -82,28 +82,6 @@ impl SwitchBotApi {
     }
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct DeviceListResponse {
-    _status_code: i32,
-    _message: String,
-    body: DeviceListBody,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct DeviceListBody {
-    device_list: Vec<DeviceDto>,
-    infrared_remote_list: Option<Vec<IrRemoteDto>>,
-}
-
-#[derive(Serialize)]
-struct CommandBody {
-    command: String,
-    parameter: String,
-    command_type: String,
-}
-
 #[async_trait]
 impl IDeviceRepository for SwitchBotApi {
     async fn get_device(&self, id: &DeviceId) -> Result<Device> {
@@ -119,46 +97,38 @@ impl IDeviceRepository for SwitchBotApi {
 
     async fn send_command(&self, id: &DeviceId, command: &Command) -> Result<()> {
         let url = self.host.clone() + "/devices/" + &id.value()?.to_string() + "/commands";
+        println!("{}", url.clone());
 
-        let (command_str, parameter, parameter_type) = match command {
-            Command::TurnOn => ("turnOn".into(), "default".into(), "command".into()),
-            Command::TurnOff => ("turnOff".into(), "default".into(), "command".into()),
-            // Command::SetBrightness(level) => {
-            //     ("setBrightness".into(), level.to_string(), "command".into())
-            // }
-            // Command::SetColor(color) => ("setColor".into(), color.clone(), "command".into()),
-            // Command::Custom { name, params } => {
-            //     let param = params
-            //         .as_ref()
-            //         .map(|v| v.to_string())
-            //         .unwrap_or_else(|| "default".to_string());
-            //     (name.clone(), param, "command".to_string())
-            // }
+        let (command_type, command, parameter): (String, String, String)  = match command {
+            Command::TurnOn => ("command".into(), "turnOn".into(), "default".into()),
+            Command::TurnOff => ("command".into(), "turnOff".into(), "default".into()),
             Command::Custom { name, params } => {
-                println!("{params:?}");
-                (name.clone(), "hoge".to_string(), "command".to_string())
+                todo!("Custom command is not implemented yet");
             }
         };
 
-        let body = CommandBody {
-            command: command_str,
+        let body = CommandRequestBody {
+            command_type,
+            command,
             parameter,
-            command_type: parameter_type,
         };
 
-        let res = self
-            .client
+        let req =self.client
             .post(&url)
             .headers(self.auth_headers()?)
-            .json(&body)
-            .send()
-            .await?;
+            .json(&body);
+
+        let res = req.send().await?;
 
         if !res.status().is_success() {
             bail!("API Error: {}", res.status())
         }
+        
+        //let res: CommandResponse = res.json().await?;
+        println!("{res:?}");
 
         Ok(())
+
     }
 
     async fn get_device_list(&self) -> Result<Vec<Device>> {
@@ -170,8 +140,8 @@ impl IDeviceRepository for SwitchBotApi {
             bail!("Request failed with status: {}", res.status())
         }
 
-        let parsed: DeviceListResponse = res.json().await?;
-        let devices = self.to_device_list(parsed);
+        let res: DeviceListResponse = res.json().await?;
+        let devices = self.to_device_list(res);
 
         Ok(devices)
     }

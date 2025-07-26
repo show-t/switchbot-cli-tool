@@ -1,7 +1,26 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 use crate::domain::models::Device;
 use crate::domain::models::value_objects::DeviceId;
+
+#[allow(dead_code)]
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct SwitchbotApiResponse<T> {
+    pub(super) status_code: i32,
+    pub(super) message: String,
+    pub(super) body: T,
+}
+
+pub(super) type DeviceListResponse = SwitchbotApiResponse<DeviceListResponseBody>;
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct DeviceListResponseBody {
+    pub(super) device_list: Vec<DeviceDto>,
+    pub(super) infrared_remote_list: Option<Vec<IrRemoteDto>>,
+} 
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -11,7 +30,6 @@ pub(super) struct DeviceDto {
     device_type: String,
     hub_device_id: String,
 }
-
 impl From<DeviceDto> for Device {
     fn from(dto: DeviceDto) -> Self {
         Device {
@@ -43,3 +61,20 @@ impl From<IrRemoteDto> for Device {
         }
     }
 }
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct CommandRequestBody {
+    pub(super) command_type: String,
+    pub(super) command: String,
+    //pub(super) parameter: Option<Value>,
+    pub(super) parameter: String,
+}
+
+pub(super) type CommandResponse = SwitchbotApiResponse<CommandResponseBody>;
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub(super) struct CommandResponseBody {
+    pub(super) body: Value,
+} 
