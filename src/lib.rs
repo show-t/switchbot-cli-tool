@@ -1,7 +1,7 @@
 pub mod domain {
     pub mod repositories {
-        mod device_repository;
-        pub use device_repository::DeviceRepository;
+        mod device_repository_interface;
+        pub use device_repository_interface::IDeviceRepository;
     } 
 
     pub mod models {
