@@ -41,3 +41,5 @@ Cargo.lock
 
 # output files
 /output
+
+device_aliases.json
