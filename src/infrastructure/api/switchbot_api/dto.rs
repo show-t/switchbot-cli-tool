@@ -72,9 +72,4 @@ pub(super) struct CommandRequestBody {
 }
 
 pub(super) type CommandResponse = SwitchbotApiResponse<CommandResponseBody>;
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub(super) struct CommandResponseBody {
-    pub(super) body: Value,
-} 
+pub(super) type CommandResponseBody = Value;

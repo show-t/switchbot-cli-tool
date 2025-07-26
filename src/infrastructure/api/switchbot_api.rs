@@ -124,7 +124,7 @@ impl IDeviceRepository for SwitchBotApi {
             bail!("API Error: {}", res.status())
         }
         
-        //let res: CommandResponse = res.json().await?;
+        let res: CommandResponse = res.json().await?;
         println!("{res:?}");
 
         Ok(())
