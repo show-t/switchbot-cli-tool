@@ -17,7 +17,7 @@ pub mod domain {
             pub use device_id::DeviceId;
 
             mod command;
-            pub use command::{Command, BrightnessValue};
+            pub use command::*;
         }
     }
 }

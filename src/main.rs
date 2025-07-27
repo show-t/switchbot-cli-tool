@@ -1,7 +1,7 @@
 use clap::Parser;
 use anyhow::{anyhow, Result};
 
-use switchbot_cli_tool::domain::models::value_objects::{BrightnessValue, Command};
+use switchbot_cli_tool::domain::models::value_objects::{BrightnessValue, ColorValues, Command};
 use switchbot_cli_tool::application::dto::ExecuteCommandDto;
 use switchbot_cli_tool::presentation::cli::{Cli, Commands};
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
@@ -39,6 +39,19 @@ async fn main() -> Result<()> {
                             .parse::<u8>()?
                     )?
                 ), 
+                "color" => {
+                    let [r, g, b]: [u8; 3] = values
+                        .ok_or_else(|| anyhow!("No values"))?
+                        .iter()
+                        .map(|s| s.parse::<u8>().map_err(|e| anyhow!(e)))
+                        .collect::<Result<Vec<u8>>>()?
+                        .as_slice()
+                        .try_into()?;
+
+                    Command::SetColor(
+                        ColorValues::try_from((r, g, b))?
+                    )
+                },
                 other => Command::Custom {
                     name: other.to_string(),
                     params: values.unwrap_or_default().into_iter()

@@ -6,8 +6,9 @@ use base64::{Engine as _, engine::general_purpose};
 use hmac::{Hmac, Mac};
 use rand::{Rng, distributions::Alphanumeric};
 use sha2::Sha256;
+use std::fmt::format;
 use std::time::{SystemTime, UNIX_EPOCH};
-use serde_json::Value::Number;
+use serde_json::Value;
 
 use async_trait::async_trait;
 use reqwest::Client;
@@ -114,7 +115,15 @@ impl IDeviceRepository for SwitchBotApi {
             Command::SetBrightness(value) => CommandRequestBody { 
                 command_type: "command".into(), 
                 command: "setBrightness".into(), 
-                parameter: Number(value.get().into()),   
+                parameter: Value::Number(value.get().into()),   
+            },
+            Command::SetColor(values) => {
+                let (r, g, b) = values.get();
+                CommandRequestBody {
+                    command_type: "command".into(),
+                    command: "setColor".into(),
+                    parameter: Value::String(format!("{}:{}:{}", r, g, b))
+                }
             },
             Command::Custom { name, params } => {
                 todo!("Custom command is not implemented yet");
