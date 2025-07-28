@@ -7,6 +7,7 @@ pub enum Command {
     TurnOff,
     SetBrightness(BrightnessValue),
     SetColor(ColorValues),
+    SetColorTemperature(ColorTemperatureValue),
     Custom {
         name: String,
         params: Vec<Option<Value>>
@@ -25,10 +26,13 @@ impl TryFrom<u8> for BrightnessValue {
     type Error = Error;
 
     fn try_from(value: u8) -> Result<Self> {
-        (1..=100)
+        let inf = 1;
+        let sup = 100;
+        
+        (inf..=sup)
             .contains(&value)
             .then(||Self(value))
-            .ok_or_else(|| anyhow!("Value must be between 1 and 100"))        
+            .ok_or_else(|| anyhow!("Value must be between {inf} and {sup}"))        
     }    
 }
 
@@ -62,5 +66,26 @@ impl TryFrom<(u8, u8, u8)> for ColorValues {
             .all(|&v|(0..=255).contains(&v))
             .then(||Self(r, g, b))
             .ok_or_else(|| anyhow!("color values must be between 0 and 255"))      
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct ColorTemperatureValue(u16);
+impl ColorTemperatureValue {
+    pub fn get(&self) -> u16 {
+        self.0
+    }
+}
+impl TryFrom<u16> for ColorTemperatureValue {
+    type Error = Error;
+
+    fn try_from(value: u16) -> Result<Self> {
+        let inf = 2700;
+        let sup = 6500;
+        
+        (inf..=sup)
+            .contains(&value)
+            .then(||Self(value))
+            .ok_or_else(|| anyhow!("Value must be between {inf} and {sup}"))
     }
 }

@@ -1,7 +1,7 @@
 use clap::Parser;
 use anyhow::{anyhow, Result};
 
-use switchbot_cli_tool::domain::models::value_objects::{BrightnessValue, ColorValues, Command};
+use switchbot_cli_tool::domain::models::value_objects::{BrightnessValue, ColorTemperatureValue, ColorValues, Command};
 use switchbot_cli_tool::application::dto::ExecuteCommandDto;
 use switchbot_cli_tool::presentation::cli::{Cli, Commands};
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
@@ -52,6 +52,15 @@ async fn main() -> Result<()> {
                         ColorValues::try_from((r, g, b))?
                     )
                 },
+                "color_temp" => Command::SetColorTemperature(
+                    ColorTemperatureValue::try_from(
+                        values
+                            .as_ref()
+                            .and_then(|v| v.get(0))
+                            .ok_or_else(|| anyhow!("value does not exist"))?
+                            .parse::<u16>()?
+                    )?
+                ),
                 other => Command::Custom {
                     name: other.to_string(),
                     params: values.unwrap_or_default().into_iter()
