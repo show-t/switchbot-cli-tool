@@ -72,4 +72,4 @@ pub(super) struct CommandRequestBody {
 }
 
 pub(super) type CommandResponse = SwitchbotApiResponse<CommandResponseBody>;
-pub(super) type CommandResponseBody = Value;
+pub(super) type CommandResponseBody = Option<Value>;
