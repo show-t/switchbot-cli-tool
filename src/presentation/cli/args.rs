@@ -1,19 +1,6 @@
 use clap::{Parser,Subcommand};
 
 #[derive(Parser, Debug)]
-#[command(name = "switchbot-cli")]
-pub struct CliArgs {
-    #[arg(long)]
-    pub device: String,
-
-    #[arg(long)]
-    pub command: String,
-
-    #[arg(long)]
-    pub value: Option<String>
-}
-
-#[derive(Parser, Debug)]
 #[command(name="switchbot-cli")]
 #[command(about = "CLI for controlling SwitchBot devices", long_about = None)]
 pub struct Cli {
@@ -24,4 +11,14 @@ pub struct Cli {
 #[derive(Subcommand, Debug)]
 pub enum Commands {
     DeviceList,
+    Exec {
+        #[arg(short, long)]
+        device: String,
+
+        #[arg(short, long)]
+        command: String,
+
+        #[arg(short, long, num_args=1..)]
+        values: Option<Vec<String>>
+    }
 }

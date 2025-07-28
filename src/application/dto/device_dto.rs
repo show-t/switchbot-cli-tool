@@ -1,5 +1,22 @@
 use crate::domain::models::Device;
+use crate::domain::models::value_objects::Command;
+
 use anyhow::Result;
+
+#[derive(Debug)]
+pub struct ExecuteCommandDto {
+    pub device_id: String,
+    pub command: Command,
+}
+
+impl ExecuteCommandDto {
+    pub fn new(device_id: String, command: Command) -> Self {
+        Self {
+            device_id,
+            command,
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct DeviceResponseDto {

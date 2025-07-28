@@ -1,10 +1,11 @@
 use clap::Parser;
-use anyhow::{Result, anyhow};
+use anyhow::{anyhow, Result};
 
+use switchbot_cli_tool::domain::models::value_objects::{BrightnessValue, ColorTemperatureValue, ColorValues, Command};
+use switchbot_cli_tool::application::dto::ExecuteCommandDto;
 use switchbot_cli_tool::presentation::cli::{Cli, Commands};
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
 use switchbot_cli_tool::application::ControlDeviceUseCase;
-use switchbot_cli_tool::application::export_devices::export_devices_to_file;
 
 mod config;
 use config::Config;
@@ -21,37 +22,60 @@ async fn main() -> Result<()> {
         Commands::DeviceList => {
             let devices = use_case.fetch_devices().await?;
             devices.into_iter().for_each(|v| println!("{v:?}"));
+        }
+        Commands::Exec { device, command, values } => {
+            println!("{device:?} {command:?} {values:?}");
 
-            // _ = export_devices_to_file(&devices, "output/devices.json");
+            let device_id = device;
+            let command = match command.as_str() {
+                "on" => Command::TurnOn,
+                "off" => Command::TurnOff,
+                "brightness" => Command::SetBrightness(
+                    BrightnessValue::try_from(
+                        values
+                            .as_ref()
+                            .and_then(|v| v.get(0))
+                            .ok_or_else(|| anyhow!("value does not exist"))?
+                            .parse::<u8>()?
+                    )?
+                ), 
+                "color" => {
+                    let [r, g, b]: [u8; 3] = values
+                        .ok_or_else(|| anyhow!("No values"))?
+                        .iter()
+                        .map(|s| s.parse::<u8>().map_err(|e| anyhow!(e)))
+                        .collect::<Result<Vec<u8>>>()?
+                        .as_slice()
+                        .try_into()?;
+
+                    Command::SetColor(
+                        ColorValues::try_from((r, g, b))?
+                    )
+                },
+                "color_temp" => Command::SetColorTemperature(
+                    ColorTemperatureValue::try_from(
+                        values
+                            .as_ref()
+                            .and_then(|v| v.get(0))
+                            .ok_or_else(|| anyhow!("value does not exist"))?
+                            .parse::<u16>()?
+                    )?
+                ),
+                other => Command::Custom {
+                    name: other.to_string(),
+                    params: values.unwrap_or_default().into_iter()
+                        .map(|s| serde_json::from_str(&s).ok())
+                        .collect()
+                },
+            }; 
+
+            let _ = use_case.execute(ExecuteCommandDto::new(
+                device_id,
+                command
+            )).await?;
         }
     }
 
     Ok(())
 
-    /* let args = CliArgs::parse();
-
-    let command = match args.command.as_str() {
-        "turn_on" => Command::TurnOn,
-        "turn_off" => Command::TurnOff,
-        "set_brightness" => {
-            let level: u8 = args.value
-                .as_ref()
-                .ok_or_else(|| anyhow!("--value is required for set_brightness"))?
-                .parse()?;
-            Command::SetBrightness(level)
-        }
-        other => Command::Custom {
-            name: other.to_string(),
-            params: args.value
-                .as_ref()
-                .map(|v| serde_json::from_str(v))
-                .transpose()?,
-        },
-    };
-
-    
-
-    use_case.execute(DeviceId(args.device), command).await */
-
-    //Ok(())
 }

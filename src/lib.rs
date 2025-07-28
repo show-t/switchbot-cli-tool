@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+
 pub mod domain {
     pub mod repositories {
         mod device_repository_interface;
@@ -13,7 +17,7 @@ pub mod domain {
             pub use device_id::DeviceId;
 
             mod command;
-            pub use command::Command;
+            pub use command::*;
         }
     }
 }
@@ -39,17 +43,16 @@ pub mod application {
 
     pub mod dto {
         mod device_dto;
-        pub use device_dto::DeviceResponseDto;
+        pub use device_dto::*;
     }
 }
 
 pub mod presentation {
     pub mod cli {
         mod args;
-        pub use args::CliArgs;
         pub use args::{
             Cli,
-            Commands
+            Commands,
         };
     }
 }
