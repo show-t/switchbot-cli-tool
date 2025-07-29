@@ -1,5 +1,5 @@
-use serde::Serialize;
 use anyhow::Result;
+use serde::Serialize;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
 pub struct DeviceId(String);

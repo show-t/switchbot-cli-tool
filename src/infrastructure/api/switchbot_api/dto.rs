@@ -20,7 +20,7 @@ pub(super) type DeviceListResponse = SwitchbotApiResponse<DeviceListResponseBody
 pub(super) struct DeviceListResponseBody {
     pub(super) device_list: Vec<DeviceDto>,
     pub(super) infrared_remote_list: Option<Vec<IrRemoteDto>>,
-} 
+}
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]

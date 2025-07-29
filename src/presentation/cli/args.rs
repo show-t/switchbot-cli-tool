@@ -1,7 +1,7 @@
-use clap::{Parser,Subcommand};
+use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
-#[command(name="switchbot-cli")]
+#[command(name = "switchbot-cli")]
 #[command(about = "CLI for controlling SwitchBot devices", long_about = None)]
 pub struct Args {
     #[command(subcommand)]
@@ -19,6 +19,6 @@ pub enum Commands {
         command: String,
 
         #[arg(short, long, num_args=1..)]
-        values: Option<Vec<String>>
-    }
+        values: Option<Vec<String>>,
+    },
 }

@@ -6,7 +6,7 @@ pub mod domain {
     pub mod repositories {
         mod device_repository_interface;
         pub use device_repository_interface::IDeviceRepository;
-    } 
+    }
 
     pub mod models {
         mod device;
@@ -27,7 +27,7 @@ pub mod infrastructure {
         mod switchbot_api;
         pub use switchbot_api::SwitchBotApi;
     }
-    
+
     pub mod io {
         mod device_file_writer;
         pub use device_file_writer::DeviceFileWriter;
@@ -50,10 +50,8 @@ pub mod application {
 pub mod presentation {
     pub mod cli {
         mod args;
-        pub use args::{
-            Args,
-            Commands,
-        };
+        pub use args::Args;
+        pub use args::Commands;
 
         mod dispatch;
         pub use dispatch::dispatch;

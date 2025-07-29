@@ -1,22 +1,25 @@
 use anyhow::Result;
 
+use crate::application::dto::{DeviceResponseDto, ExecuteCommandDto};
+use crate::application::export_devices::export_devices_to_file;
 use crate::domain::models::value_objects::DeviceId;
 use crate::domain::repositories::IDeviceRepository;
-use crate::application::export_devices::export_devices_to_file;
-use crate::application::dto::{DeviceResponseDto, ExecuteCommandDto};
 
 pub struct ControlDeviceUseCase<'a, R: IDeviceRepository> {
     pub repo: &'a R,
 }
 
-impl <'a, R: IDeviceRepository> ControlDeviceUseCase<'a, R> {
+impl<'a, R: IDeviceRepository> ControlDeviceUseCase<'a, R> {
     pub fn new(repo: &'a R) -> Self {
         Self { repo }
     }
 
-    pub async fn execute(&self, dto: ExecuteCommandDto) -> Result<()>{
+    pub async fn execute(&self, dto: ExecuteCommandDto) -> Result<()> {
         let device_id = DeviceId::new(dto.device_id);
-        println!("[ControlDeviceUseCase::execute]: {:?} {:?}", device_id, dto.command);
+        println!(
+            "[ControlDeviceUseCase::execute]: {:?} {:?}",
+            device_id, dto.command
+        );
         self.repo.send_command(&device_id, &dto.command).await
     }
 
@@ -28,4 +31,3 @@ impl <'a, R: IDeviceRepository> ControlDeviceUseCase<'a, R> {
         Ok(dto)
     }
 }
-

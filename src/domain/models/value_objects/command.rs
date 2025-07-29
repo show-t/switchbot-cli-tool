@@ -1,5 +1,5 @@
+use anyhow::{Error, Result, anyhow};
 use serde_json::Value;
-use anyhow::{anyhow, Result, Error};
 
 #[derive(Debug, Clone)]
 pub enum Command {
@@ -10,7 +10,7 @@ pub enum Command {
     SetColorTemperature(ColorTemperatureValue),
     Custom {
         name: String,
-        params: Vec<Option<Value>>
+        params: Vec<Option<Value>>,
     },
 }
 
@@ -28,12 +28,12 @@ impl TryFrom<u8> for BrightnessValue {
     fn try_from(value: u8) -> Result<Self> {
         let inf = 1;
         let sup = 100;
-        
+
         (inf..=sup)
             .contains(&value)
-            .then(||Self(value))
-            .ok_or_else(|| anyhow!("Value must be between {inf} and {sup}"))        
-    }    
+            .then(|| Self(value))
+            .ok_or_else(|| anyhow!("Value must be between {inf} and {sup}"))
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -52,7 +52,7 @@ impl ColorValues {
     }
 
     pub fn get_b(&self) -> u8 {
-        self.2 
+        self.2
     }
 }
 
@@ -63,9 +63,9 @@ impl TryFrom<(u8, u8, u8)> for ColorValues {
         let (r, g, b) = values;
         [r, g, b]
             .iter()
-            .all(|&v|(0..=255).contains(&v))
-            .then(||Self(r, g, b))
-            .ok_or_else(|| anyhow!("color values must be between 0 and 255"))      
+            .all(|&v| (0..=255).contains(&v))
+            .then(|| Self(r, g, b))
+            .ok_or_else(|| anyhow!("color values must be between 0 and 255"))
     }
 }
 
@@ -82,10 +82,10 @@ impl TryFrom<u16> for ColorTemperatureValue {
     fn try_from(value: u16) -> Result<Self> {
         let inf = 2700;
         let sup = 6500;
-        
+
         (inf..=sup)
             .contains(&value)
-            .then(||Self(value))
+            .then(|| Self(value))
             .ok_or_else(|| anyhow!("Value must be between {inf} and {sup}"))
     }
 }

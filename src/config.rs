@@ -1,6 +1,6 @@
-use serde::Deserialize;
 use anyhow::Result;
 use dotenvy::dotenv;
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {

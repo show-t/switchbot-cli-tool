@@ -1,20 +1,23 @@
-mod dto;
-use dto::{DeviceListResponse, CommandResponse};
-
-use anyhow::{Result, bail};
-use base64::{Engine as _, engine::general_purpose};
-use hmac::{Hmac, Mac};
-use rand::{Rng, distributions::Alphanumeric};
-use sha2::Sha256;
 use std::fmt::format;
 use std::time::{SystemTime, UNIX_EPOCH};
-use serde_json::Value;
 
+use anyhow::{Result, bail};
 use async_trait::async_trait;
+use base64::Engine as _;
+use base64::engine::general_purpose;
+use hmac::{Hmac, Mac};
+use rand::Rng;
+use rand::distributions::Alphanumeric;
 use reqwest::Client;
+use serde_json::Value;
+use sha2::Sha256;
+
+mod dto;
+use dto::{CommandResponse, DeviceListResponse};
 
 use crate::domain::models::Device;
-use crate::domain::models::value_objects::{DeviceId, Command};
+use crate::domain::models::value_objects::Command;
+use crate::domain::models::value_objects::DeviceId;
 use crate::domain::repositories::IDeviceRepository;
 use crate::infrastructure::api::switchbot_api::dto::CommandRequestBody;
 
@@ -59,7 +62,10 @@ impl SwitchBotApi {
     }
 
     fn auth_headers(&self) -> Result<reqwest::header::HeaderMap> {
-        use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderValue};
+        use reqwest::header::AUTHORIZATION;
+        use reqwest::header::CONTENT_TYPE;
+        use reqwest::header::HeaderMap;
+        use reqwest::header::HeaderValue;
 
         let (timestamp, nonce, sign) = self.generate_signature()?;
 
@@ -112,30 +118,31 @@ impl IDeviceRepository for SwitchBotApi {
                 command: "turnOff".into(),
                 parameter: "default".into(),
             },
-            Command::SetBrightness(value) => CommandRequestBody { 
-                command_type: "command".into(), 
-                command: "setBrightness".into(), 
-                parameter: Value::Number(value.get().into()),   
+            Command::SetBrightness(value) => CommandRequestBody {
+                command_type: "command".into(),
+                command: "setBrightness".into(),
+                parameter: Value::Number(value.get().into()),
             },
             Command::SetColor(values) => {
                 let (r, g, b) = values.get();
                 CommandRequestBody {
                     command_type: "command".into(),
                     command: "setColor".into(),
-                    parameter: Value::String(format!("{}:{}:{}", r, g, b))
+                    parameter: Value::String(format!("{}:{}:{}", r, g, b)),
                 }
-            },
-            Command::SetColorTemperature(value) => CommandRequestBody { 
-                command_type: "command".into(), 
-                command: "setColorTemperature".into(), 
-                parameter: Value::Number(value.get().into()),   
+            }
+            Command::SetColorTemperature(value) => CommandRequestBody {
+                command_type: "command".into(),
+                command: "setColorTemperature".into(),
+                parameter: Value::Number(value.get().into()),
             },
             Command::Custom { name, params } => {
                 todo!("Custom command is not implemented yet");
             }
         };
-        
-        let req =self.client
+
+        let req = self
+            .client
             .post(&url)
             .headers(self.auth_headers()?)
             .json(&body);
@@ -145,12 +152,11 @@ impl IDeviceRepository for SwitchBotApi {
         if !res.status().is_success() {
             bail!("API Error: {}", res.status())
         }
-        
+
         let res: CommandResponse = res.json().await?;
         println!("{res:?}");
 
         Ok(())
-
     }
 
     async fn get_device_list(&self) -> Result<Vec<Device>> {
