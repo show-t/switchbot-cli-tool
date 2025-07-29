@@ -3,7 +3,7 @@ use clap::{Parser,Subcommand};
 #[derive(Parser, Debug)]
 #[command(name="switchbot-cli")]
 #[command(about = "CLI for controlling SwitchBot devices", long_about = None)]
-pub struct Cli {
+pub struct Args {
     #[command(subcommand)]
     pub command: Commands,
 }

@@ -51,8 +51,11 @@ pub mod presentation {
     pub mod cli {
         mod args;
         pub use args::{
-            Cli,
+            Args,
             Commands,
         };
+
+        mod dispatch;
+        pub use dispatch::dispatch;
     }
 }
