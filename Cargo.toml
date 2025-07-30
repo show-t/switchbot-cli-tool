@@ -17,3 +17,5 @@ hmac = "0.12"
 sha2 = "0.10"
 base64 = "0.22.1"
 rand = "0.7"
+tracing = "0.1.41"
+tracing-subscriber = {version = "0.3.19", features = ["std", "env-filter", "time", "local-time"]}

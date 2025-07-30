@@ -1,5 +1,6 @@
 use anyhow::{Result, anyhow};
 use clap::Parser;
+use tracing::{self, instrument};
 
 use crate::application::ControlDeviceUseCase;
 use crate::application::dto::ExecuteCommandDto;
@@ -27,7 +28,7 @@ pub async fn dispatch<'a, R: IDeviceRepository>(
             command,
             values,
         } => {
-            println!("{device:?} {command:?} {values:?}");
+            tracing::debug!("{device:?} {command:?} {values:?}");
 
             let device_id = device;
             let command = match command.as_str() {

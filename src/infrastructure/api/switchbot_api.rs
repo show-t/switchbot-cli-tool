@@ -21,6 +21,7 @@ use crate::domain::models::value_objects::DeviceId;
 use crate::domain::repositories::IDeviceRepository;
 use crate::infrastructure::api::switchbot_api::dto::CommandRequestBody;
 
+#[derive(Debug)]
 pub struct SwitchBotApi {
     pub host: String,
     pub token: String,
@@ -105,7 +106,7 @@ impl IDeviceRepository for SwitchBotApi {
 
     async fn send_command(&self, id: &DeviceId, command: &Command) -> Result<()> {
         let url = self.host.clone() + "/devices/" + &id.value()?.to_string() + "/commands";
-        println!("{}", url.clone());
+        tracing::debug!("{:?}", url);
 
         let body = match command {
             Command::TurnOn => CommandRequestBody {
@@ -154,15 +155,21 @@ impl IDeviceRepository for SwitchBotApi {
         }
 
         let res: CommandResponse = res.json().await?;
-        println!("{res:?}");
-
+        tracing::debug!("{res:?}");
         Ok(())
     }
 
     async fn get_device_list(&self) -> Result<Vec<Device>> {
         let url = self.host.clone() + "/devices";
-        let client = reqwest::Client::new();
-        let res = client.get(url).headers(self.auth_headers()?).send().await?;
+        tracing::debug!("{:?}", url);
+
+        //let client = reqwest::Client::new();
+        let req = self
+            .client
+            .get(url)
+            .headers(self.auth_headers()?);
+
+        let res = req.send().await?;
 
         if !res.status().is_success() {
             bail!("Request failed with status: {}", res.status())
