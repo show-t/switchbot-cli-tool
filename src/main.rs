@@ -11,13 +11,19 @@ use switchbot_cli_tool::presentation::cli;
 mod config;
 use config::Config;
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn tracing_init() -> Result<()> {
     dotenvy::dotenv()?;
     tracing_subscriber::fmt()
         .with_timer(LocalTime::rfc_3339())
         .with_env_filter(EnvFilter::from_default_env())
         .init();
+
+    Ok(())
+}
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    _ = tracing_init()?;
 
     let config = Config::from_env()?;
 

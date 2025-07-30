@@ -2,6 +2,7 @@ use anyhow::{Result, anyhow};
 use clap::Parser;
 use tracing::{self, instrument};
 
+use crate::application::adapter::alias::AliasResolver;
 use crate::application::ControlDeviceUseCase;
 use crate::application::dto::ExecuteCommandDto;
 use crate::domain::models::value_objects::{
@@ -11,6 +12,7 @@ use crate::domain::models::value_objects::{
     Command,
 };
 use crate::domain::repositories::IDeviceRepository;
+use crate::infrastructure::io::JsonAliasLoader;
 use crate::presentation::cli::{Args, Commands};
 
 #[instrument(skip(use_case))]
@@ -18,6 +20,7 @@ pub async fn dispatch<'a, R: IDeviceRepository>(
     use_case: &'a ControlDeviceUseCase<'a, R>,
 ) -> Result<()> {
     let args = Args::parse();
+    let resolver = AliasResolver::new(JsonAliasLoader::load("device_aliases.json")?.0);
 
     match args.command {
         Commands::DeviceList => {
@@ -31,7 +34,7 @@ pub async fn dispatch<'a, R: IDeviceRepository>(
         } => {
             tracing::debug!("{device:?} {command:?} {values:?}");
 
-            let device_id = device;
+            let device_id = resolver.resolve(device.as_str()).to_string();
             let command = match command.as_str() {
                 "on" => Command::TurnOn,
                 "off" => Command::TurnOff,

@@ -31,6 +31,9 @@ pub mod infrastructure {
     pub mod io {
         mod device_file_writer;
         pub use device_file_writer::DeviceFileWriter;
+
+        mod json_alias_loader;
+        pub use json_alias_loader::JsonAliasLoader;
     }
 }
 
@@ -44,6 +47,13 @@ pub mod application {
     pub mod dto {
         mod device_dto;
         pub use device_dto::*;
+    }
+
+    pub mod adapter {
+        pub mod alias {
+            mod alias_resolver;
+            pub use alias_resolver::AliasResolver;
+        }
     }
 }
 
