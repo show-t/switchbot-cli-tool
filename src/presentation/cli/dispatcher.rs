@@ -6,10 +6,10 @@ use crate::application::adapter::alias::AliasResolver;
 use crate::application::{ControlDeviceUseCase, IControlDeviceUseCase};
 use crate::application::dto::ExecuteCommandDto;
 use crate::domain::models::value_objects::{
-    BrightnessValue,
-    ColorTemperatureValue,
-    ColorValues,
-    Command,
+    BrightnessValue, ColorTemperatureValue, ColorValues, Command
+};
+use crate::domain::models::value_objects::{
+    AcPowerState, AcValues, AcMode, AcFanSpeed,
 };
 use crate::domain::repositories::IDeviceRepository;
 use crate::presentation::cli::{Args, Commands};
@@ -74,6 +74,20 @@ impl<'a> Dispatcher<'a> {
                             .ok_or_else(|| anyhow!("value does not exist"))?
                             .parse::<u16>()?,
                     )?),
+                    "ac" => {
+                        let values:[String; 4] = values
+                            .ok_or_else(|| anyhow!("value does not exist"))?
+                            .try_into()
+                            .map_err(|_| anyhow!("invalid number of elements."))?;
+
+                        let temperature = values[0].parse::<u8>()?;
+                        let mode = AcMode::try_from(values[1].parse::<u8>()?)?;
+                        let fan_speed = AcFanSpeed::try_from(values[2].parse::<u8>()?)?;
+                        let power_state = AcPowerState::from_str(values[3].as_str()).ok_or_else(|| anyhow!("value is invalid."))?;
+                        
+                        let values = AcValues{temperature, mode, fan_speed, power_state};
+                        Command::AcSetAll(values)
+                    }
                     other => Command::Custom {
                         name: other.to_string(),
                         params: values

@@ -137,6 +137,17 @@ impl IDeviceRepository for SwitchBotApi {
                 command: "setColorTemperature".into(),
                 parameter: Value::Number(value.get().into()),
             },
+            Command::AcSetAll(values) => CommandRequestBody {
+                command_type: "command".into(),
+                command: "setAll".into(),
+                parameter: Value::String(format!(
+                    "{},{},{},{}", 
+                    values.temperature,
+                    values.mode as u8,
+                    values.fan_speed as u8,
+                    values.power_state.as_str(),
+                )),
+            },
             Command::Custom { name, params } => {
                 todo!("Custom command is not implemented yet");
             }

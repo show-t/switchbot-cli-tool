@@ -1,4 +1,5 @@
 use anyhow::{Error, Result, anyhow};
+use num_enum::TryFromPrimitive;
 use serde_json::Value;
 
 #[derive(Debug, Clone)]
@@ -8,6 +9,7 @@ pub enum Command {
     SetBrightness(BrightnessValue),
     SetColor(ColorValues),
     SetColorTemperature(ColorTemperatureValue),
+    AcSetAll(AcValues),
     Custom {
         name: String,
         params: Vec<Option<Value>>,
@@ -87,5 +89,48 @@ impl TryFrom<u16> for ColorTemperatureValue {
             .contains(&value)
             .then(|| Self(value))
             .ok_or_else(|| anyhow!("Value must be between {inf} and {sup}"))
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct AcValues {
+    pub temperature: u8,
+    pub mode: AcMode,
+    pub fan_speed: AcFanSpeed,
+    pub power_state: AcPowerState,
+}
+
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+pub enum AcMode {
+    AUTO = 1,
+    COOL = 2,
+    DRY = 3,
+    FAN = 4,
+    HEAT = 5,
+}
+
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+pub enum AcFanSpeed {
+    AUTO = 1,
+    LOW = 2,
+    MEDIUM = 3,
+    HIGH = 4,
+}
+
+#[derive(Debug, Clone)]
+pub struct AcPowerState(pub bool);
+impl AcPowerState {
+    pub fn from_str(s: &str) -> Option<Self> {
+        match s.to_lowercase().as_str() {
+            "on" | "1" => Some(Self(true)),
+            "off" | "0" => Some(Self(false)),
+            _ => None, 
+        }
+    }
+
+    pub fn as_str(&self) -> &'static str {
+        if self.0 {"on"} else {"off"}
     }
 }
