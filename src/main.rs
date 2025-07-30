@@ -38,7 +38,7 @@ async fn main() -> Result<()> {
         &use_case,
         &resolver
     );
-    _ = dispatcher.dispatch(&use_case).await;
+    _ = dispatcher.dispatch().await;
     tracing::info!("Process End");
 
     Ok(())

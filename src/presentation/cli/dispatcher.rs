@@ -3,7 +3,7 @@ use clap::Parser;
 use tracing::{self, instrument};
 
 use crate::application::adapter::alias::AliasResolver;
-use crate::application::ControlDeviceUseCase;
+use crate::application::{ControlDeviceUseCase, IControlDeviceUseCase};
 use crate::application::dto::ExecuteCommandDto;
 use crate::domain::models::value_objects::{
     BrightnessValue,
@@ -14,15 +14,14 @@ use crate::domain::models::value_objects::{
 use crate::domain::repositories::IDeviceRepository;
 use crate::presentation::cli::{Args, Commands};
 
-#[derive(Debug)]
-pub struct Dispatcher<'a, R: IDeviceRepository> {
-    use_case: &'a ControlDeviceUseCase<'a, R>,
+pub struct Dispatcher<'a> {
+    use_case: &'a dyn IControlDeviceUseCase,
     resolver: &'a AliasResolver,
 }
 
-impl<'a, R: IDeviceRepository> Dispatcher<'a, R> {
+impl<'a> Dispatcher<'a> {
     pub fn new(
-        use_case: &'a ControlDeviceUseCase<'a, R>, 
+        use_case: &'a dyn IControlDeviceUseCase, 
         resolver: &'a AliasResolver 
     ) -> Self {
         Self {
@@ -31,16 +30,12 @@ impl<'a, R: IDeviceRepository> Dispatcher<'a, R> {
         }
     }
 
-    pub async fn dispatch(
-        &self,
-        use_case: &'a ControlDeviceUseCase<'a, R>,
-    ) -> Result<()> {
+    pub async fn dispatch(&self) -> Result<()> {
         let args = Args::parse();
-        
-
+    
         match args.command {
             Commands::DeviceList => {
-                let devices = use_case.fetch_devices().await?;
+                let devices = self.use_case.fetch_devices().await?;
                 devices.into_iter().for_each(|v| println!("{v:?}"));
             }
             Commands::Exec {
@@ -89,7 +84,7 @@ impl<'a, R: IDeviceRepository> Dispatcher<'a, R> {
                     },
                 };
 
-                let _ = use_case
+                let _ = self.use_case
                     .execute(ExecuteCommandDto::new(device_id, command))
                     .await?;
             }
