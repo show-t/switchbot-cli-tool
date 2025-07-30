@@ -1,6 +1,9 @@
+use std::str::FromStr;
+
 use anyhow::{Error, Result, anyhow};
 use num_enum::TryFromPrimitive;
 use serde_json::Value;
+use strum::{Display, EnumString};
 
 #[derive(Debug, Clone)]
 pub enum Command {
@@ -101,36 +104,39 @@ pub struct AcValues {
 }
 
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, PartialEq, TryFromPrimitive, EnumString, Display)]
 pub enum AcMode {
+    #[strum(serialize = "auto", serialize = "1")]
     AUTO = 1,
+    #[strum(serialize = "cool", serialize = "2")]
     COOL = 2,
+    #[strum(serialize = "dry", serialize = "3")]
     DRY = 3,
+    #[strum(serialize = "fan", serialize = "4")]
     FAN = 4,
+    #[strum(serialize = "heat", serialize = "5")]
     HEAT = 5,
 }
 
 #[repr(u8)]
-#[derive(Debug, Clone, Copy, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, PartialEq, TryFromPrimitive, EnumString, Display)]
 pub enum AcFanSpeed {
+    #[strum(serialize = "auto", serialize = "1")]
     AUTO = 1,
+    #[strum(serialize = "low", serialize = "2")]
     LOW = 2,
+    #[strum(serialize = "medium", serialize = "3")]
     MEDIUM = 3,
+    #[strum(serialize = "high", serialize = "4")]
     HIGH = 4,
 }
 
-#[derive(Debug, Clone)]
-pub struct AcPowerState(pub bool);
-impl AcPowerState {
-    pub fn from_str(s: &str) -> Option<Self> {
-        match s.to_lowercase().as_str() {
-            "on" | "1" => Some(Self(true)),
-            "off" | "0" => Some(Self(false)),
-            _ => None, 
-        }
-    }
-
-    pub fn as_str(&self) -> &'static str {
-        if self.0 {"on"} else {"off"}
-    }
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, TryFromPrimitive, EnumString, Display)]
+pub enum AcPowerState {
+    #[strum(serialize = "off", serialize = "0")]
+    OFF = 0,
+    #[strum(serialize = "on", serialize = "1")]
+    ON,
 }
+

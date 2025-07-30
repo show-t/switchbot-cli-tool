@@ -81,10 +81,10 @@ impl<'a> Dispatcher<'a> {
                             .map_err(|_| anyhow!("invalid number of elements."))?;
 
                         let temperature = values[0].parse::<u8>()?;
-                        let mode = AcMode::try_from(values[1].parse::<u8>()?)?;
-                        let fan_speed = AcFanSpeed::try_from(values[2].parse::<u8>()?)?;
-                        let power_state = AcPowerState::from_str(values[3].as_str()).ok_or_else(|| anyhow!("value is invalid."))?;
-                        
+                        let mode = values[1].to_lowercase().parse::<AcMode>()?;
+                        let fan_speed = values[2].to_lowercase().parse::<AcFanSpeed>()?;
+                        let power_state = values[3].to_lowercase().parse::<AcPowerState>()?;
+
                         let values = AcValues{temperature, mode, fan_speed, power_state};
                         Command::AcSetAll(values)
                     }

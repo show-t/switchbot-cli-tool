@@ -145,7 +145,7 @@ impl IDeviceRepository for SwitchBotApi {
                     values.temperature,
                     values.mode as u8,
                     values.fan_speed as u8,
-                    values.power_state.as_str(),
+                    values.power_state.to_string(),
                 )),
             },
             Command::Custom { name, params } => {
@@ -174,7 +174,6 @@ impl IDeviceRepository for SwitchBotApi {
         let url = self.host.clone() + "/devices";
         tracing::debug!("{:?}", url);
 
-        //let client = reqwest::Client::new();
         let req = self
             .client
             .get(url)
