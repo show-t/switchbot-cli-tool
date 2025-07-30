@@ -63,7 +63,7 @@ pub mod presentation {
         pub use args::Args;
         pub use args::Commands;
 
-        mod dispatch;
-        pub use dispatch::dispatch;
+        mod dispatcher;
+        pub use dispatcher::Dispatcher;
     }
 }

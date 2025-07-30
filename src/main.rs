@@ -4,8 +4,10 @@ use tracing;
 use tracing_subscriber::{self, EnvFilter};
 use tracing_subscriber::fmt::time::LocalTime;
 
+use switchbot_cli_tool::application::adapter::alias::AliasResolver;
 use switchbot_cli_tool::application::ControlDeviceUseCase;
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
+use switchbot_cli_tool::infrastructure::io::JsonAliasLoader;
 use switchbot_cli_tool::presentation::cli;
 
 mod config;
@@ -29,10 +31,15 @@ async fn main() -> Result<()> {
 
     let api = SwitchBotApi::new(config.host, config.token, config.secret);
     let use_case = ControlDeviceUseCase::new(&api);
+    let resolver = AliasResolver::new(JsonAliasLoader::load("device_aliases.json")?.0);
 
     tracing::info!("Process Start");
-    _ = cli::dispatch(&use_case).await;
-    tracing::info!("Success!");
+    let dispatcher = cli::Dispatcher::new(
+        &use_case,
+        &resolver
+    );
+    _ = dispatcher.dispatch(&use_case).await;
+    tracing::info!("Process End");
 
     Ok(())
 }

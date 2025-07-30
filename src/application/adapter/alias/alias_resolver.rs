@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct AliasResolver {
     aliases: HashMap<String, String>,
 }
