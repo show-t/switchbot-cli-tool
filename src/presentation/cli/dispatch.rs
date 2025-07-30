@@ -13,6 +13,7 @@ use crate::domain::models::value_objects::{
 use crate::domain::repositories::IDeviceRepository;
 use crate::presentation::cli::{Args, Commands};
 
+#[instrument(skip(use_case))]
 pub async fn dispatch<'a, R: IDeviceRepository>(
     use_case: &'a ControlDeviceUseCase<'a, R>,
 ) -> Result<()> {

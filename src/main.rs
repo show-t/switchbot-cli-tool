@@ -24,6 +24,7 @@ async fn main() -> Result<()> {
     let api = SwitchBotApi::new(config.host, config.token, config.secret);
     let use_case = ControlDeviceUseCase::new(&api);
 
+    tracing::info!("Process Start");
     _ = cli::dispatch(&use_case).await;
     tracing::info!("Success!");
 
