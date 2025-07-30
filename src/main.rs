@@ -32,12 +32,12 @@ async fn main() -> Result<()> {
     let api = SwitchBotApi::new(config.host, config.token, config.secret);
     let use_case = ControlDeviceUseCase::new(&api);
     let resolver = AliasResolver::new(JsonAliasLoader::load("device_aliases.json")?.0);
-
-    tracing::info!("Process Start");
     let dispatcher = cli::Dispatcher::new(
         &use_case,
         &resolver
     );
+
+    tracing::info!("Process Start");
     _ = dispatcher.dispatch().await;
     tracing::info!("Process End");
 
