@@ -2,7 +2,7 @@ use anyhow::Result;
 use async_trait::async_trait;
 
 use crate::application::dto::{DeviceResponseDto, ExecuteCommandDto};
-use crate::application::export_devices::export_devices_to_file;
+use crate::application::services::export_devices::export_devices_to_file;
 use crate::domain::models::value_objects::DeviceId;
 use crate::domain::repositories::IDeviceRepository;
 

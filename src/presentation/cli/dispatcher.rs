@@ -3,7 +3,7 @@ use clap::Parser;
 use tracing::{self, instrument};
 
 use crate::application::adapter::alias::AliasResolver;
-use crate::application::{ControlDeviceUseCase, IControlDeviceUseCase};
+use crate::application::services::{ControlDeviceUseCase, IControlDeviceUseCase};
 use crate::application::dto::ExecuteCommandDto;
 use crate::domain::models::value_objects::{
     BrightnessValue, ColorTemperatureValue, ColorValues, Command

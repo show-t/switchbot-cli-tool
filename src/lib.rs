@@ -40,11 +40,13 @@ pub mod infrastructure {
 }
 
 pub mod application {
-    mod control_device;
-    pub use control_device::{IControlDeviceUseCase, ControlDeviceUseCase};
+    pub mod services {
+        mod control_device;
+        pub use control_device::{IControlDeviceUseCase, ControlDeviceUseCase};
 
-    pub mod export_devices;
-    pub use export_devices::export_devices_to_file;
+        pub mod export_devices;
+        pub use export_devices::export_devices_to_file;
+    }
 
     pub mod dto {
         mod device_dto;

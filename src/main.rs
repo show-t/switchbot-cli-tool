@@ -5,7 +5,7 @@ use tracing_subscriber::{self, EnvFilter};
 use tracing_subscriber::fmt::time::LocalTime;
 
 use switchbot_cli_tool::application::adapter::alias::AliasResolver;
-use switchbot_cli_tool::application::ControlDeviceUseCase;
+use switchbot_cli_tool::application::services::ControlDeviceUseCase;
 use switchbot_cli_tool::infrastructure::api::SwitchBotApi;
 use switchbot_cli_tool::infrastructure::io::JsonAliasLoader;
 use switchbot_cli_tool::presentation::cli;
