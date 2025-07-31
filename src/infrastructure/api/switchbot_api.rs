@@ -148,9 +148,11 @@ impl IDeviceRepository for SwitchBotApi {
                     values.power_state.to_string(),
                 )),
             },
-            Command::Custom { name, params } => {
-                todo!("Custom command is not implemented yet");
-            }
+            Command::Custom { command_type, command, parameter} => CommandRequestBody { 
+                command_type: command_type.clone(), 
+                command: command.clone(),
+                parameter: Value::String(parameter.clone())
+            },
         };
 
         let req = self

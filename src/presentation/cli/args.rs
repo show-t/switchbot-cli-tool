@@ -15,10 +15,13 @@ pub enum Commands {
         #[arg(short, long)]
         device: String,
 
-        #[arg(short, long)]
+        #[arg(short='c', long)]
         command: String,
 
         #[arg(short, long, num_args=1..)]
         values: Option<Vec<String>>,
+
+        #[arg(short='C', long)]
+        customize: bool,
     },
 }

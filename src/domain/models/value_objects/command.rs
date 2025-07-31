@@ -14,8 +14,9 @@ pub enum Command {
     SetColorTemperature(ColorTemperatureValue),
     AcSetAll(AcValues),
     Custom {
-        name: String,
-        params: Vec<Option<Value>>,
+        command_type: String,
+        command: String,
+        parameter: String,
     },
 }
 

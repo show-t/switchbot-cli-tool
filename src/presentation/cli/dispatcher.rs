@@ -13,7 +13,6 @@ use crate::domain::models::value_objects::{
 };
 use crate::domain::repositories::IDeviceRepository;
 use crate::presentation::cli::{Args, Commands};
-
 pub struct Dispatcher<'a> {
     use_case: &'a dyn IControlDeviceUseCase,
     resolver: &'a AliasResolver,
@@ -42,6 +41,7 @@ impl<'a> Dispatcher<'a> {
                 device,
                 command,
                 values,
+                customize,
             } => {
                 tracing::debug!("{device:?} {command:?} {values:?}");
 
@@ -89,12 +89,9 @@ impl<'a> Dispatcher<'a> {
                         Command::AcSetAll(values)
                     }
                     other => Command::Custom {
-                        name: other.to_string(),
-                        params: values
-                            .unwrap_or_default()
-                            .into_iter()
-                            .map(|s| serde_json::from_str(&s).ok())
-                            .collect(),
+                        command_type: if customize {"customize".into()} else {"command".into()},
+                        command,
+                        parameter: "default".into(),
                     },
                 };
 
