@@ -15,7 +15,7 @@ use sha2::Sha256;
 mod dto;
 use dto::{CommandResponse, DeviceListResponse};
 
-use crate::domain::models::Device;
+use crate::domain::models::entities::Device;
 use crate::domain::models::value_objects::Command;
 use crate::domain::models::value_objects::DeviceId;
 use crate::domain::repositories::IDeviceRepository;

@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use super::value_objects::DeviceId;
+use crate::domain::models::value_objects::DeviceId;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Device {

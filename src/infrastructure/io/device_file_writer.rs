@@ -3,7 +3,7 @@ use std::io::Write;
 
 use anyhow::Result;
 
-use crate::domain::models::Device;
+use crate::domain::models::entities::Device;
 
 pub struct DeviceFileWriter;
 

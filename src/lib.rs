@@ -9,9 +9,11 @@ pub mod domain {
     }
 
     pub mod models {
-        mod device;
-        pub use device::Device;
-
+        pub mod entities {
+            mod device;
+            pub use device::Device;
+        }
+        
         pub mod value_objects {
             mod device_id;
             pub use device_id::DeviceId;

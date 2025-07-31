@@ -1,7 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 
-use crate::domain::models::Device;
+use crate::domain::models::entities::Device;
 use crate::domain::models::value_objects::{Command, DeviceId};
 
 #[async_trait]
