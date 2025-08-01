@@ -103,7 +103,7 @@ $ switchbot-cli-tool list
 - You can control a device by specifying its device ID or alias.
 デバイスIDまたはエイリアスを指定して操作できます。
 ```sh
-$ switchbot-cli exec \
+$ switchbot-cli-tool exec \
   --device livingroom-light \
   --command on
 ```
@@ -119,7 +119,7 @@ switchbot-cli-tool exec \
 
 #### 🛠 Supported commands / 対応コマンド一覧  
 - on / off
-- set_brightness `<1-100>`
+- brightness `<1-100>`
 - color `<r:0-255>` `<g:0-255>` `<b:0-255>`
 - color_temp `<2700-6500>`
 - ac `<temperature>` `<mode:1-5>` `<fan_ speed:1-4>` `<power_state:on/off>`
@@ -129,7 +129,7 @@ switchbot-cli-tool exec \
 To use aliases, create a device_aliases.json file in the working directory with the following format:
 エイリアスを使用するには、作業ディレクトリに以下の形式の device_aliases.json ファイルを作成してください。  
 
-Each key is the alias name, and each value is the actual device ID.
+Each key is the alias name, and each value is the actual device ID.  
 キーがエイリアス名、値が実際のデバイスIDです。
 ```json
 {
