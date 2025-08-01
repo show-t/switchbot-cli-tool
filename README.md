@@ -33,9 +33,10 @@ The following command types are available:
     Set air conditioner temperature, mode, fan speed, etc., all at once  
     エアコンの温度、モード、風量などを一括設定します
 
-- `Custom`:  
+- `Custom`: (⚠️ Experimental feature / 試験的機能)  
     Send custom commands by specifying `commandType`, `command`, and `parameter` manually  
-    `commandType`・`command`・`parameter`を手動で指定し、カスタムコマンドを送信できます
+    `commandType`・`command`・`parameter`を手動で指定し、カスタムコマンドを送信できます  
+    
 
 ## Requirements / 必要要件
 
