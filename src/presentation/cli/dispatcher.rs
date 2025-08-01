@@ -36,7 +36,7 @@ impl<'a> Dispatcher<'a> {
         })?;
     
         match args.command {
-            Commands::DeviceList => {
+            Commands::List => {
                 let devices = self.use_case.fetch_devices().await?;
                 devices.into_iter().for_each(|v| println!("{v:?}"));
             }

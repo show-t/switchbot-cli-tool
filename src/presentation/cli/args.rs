@@ -10,7 +10,7 @@ pub struct Args {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    DeviceList,
+    List,
     Exec {
         #[arg(short, long)]
         device: String,
