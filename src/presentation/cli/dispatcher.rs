@@ -30,7 +30,10 @@ impl<'a> Dispatcher<'a> {
     }
 
     pub async fn dispatch(&self) -> Result<()> {
-        let args = Args::parse();
+        let args: Args = Args::try_parse().map_err(|e| {
+            tracing::error!("{e}");
+            std::process::exit(e.use_stderr() as i32);
+        })?;
     
         match args.command {
             Commands::DeviceList => {
