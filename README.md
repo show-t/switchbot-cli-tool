@@ -1,7 +1,7 @@
 # switchbot-cli-tool
 
 A command-line interface (CLI) tool written in Rust to control SwitchBot devices using the SwitchBot Web API (v1.1).  
-SwitchBot Web API（v1.1）を使用して、SwitchBotデバイスを操作するための Rust 製コマンドラインツールです。
+SwitchBot Web API（v1.1）を使用してSwitchBotデバイスを操作するための、Rust製コマンドラインツールです。
 
 ## Features
 
@@ -58,7 +58,7 @@ The following command types are available:
 
 ### 🧪 Build from source / ソースからビルド
 Clone the repository and build the project:  
-Cargo を使ってリポジトリをクローンし、手動でビルドしてください：
+リポジトリをクローンし、Cargoでビルドしてください：  
 
 ```bash
 $ git clone https://github.com/show-t/switchbot-cli-tool.git
@@ -101,7 +101,7 @@ $ switchbot-cli-tool list
 
 ### 🎛️ Control a device / デバイスを操作する
 
-- You can control a device by specifying its device ID or alias.
+- You can control a device by specifying its device ID or alias.  
 デバイスIDまたはエイリアスを指定して操作できます。
 ```sh
 $ switchbot-cli-tool exec \
@@ -109,7 +109,7 @@ $ switchbot-cli-tool exec \
   --command on
 ```
 
-- You can also specify parameters using --values:
+- You can also specify parameters using --values:  
 --values オプションでパラメータを渡すこともできます：
 ```sh
 switchbot-cli-tool exec \
@@ -127,7 +127,7 @@ switchbot-cli-tool exec \
 
 #### 📁 Aliases / エイリアス設定
 
-To use aliases, create a device_aliases.json file in the working directory with the following format:
+To use aliases, create a device_aliases.json file in the working directory with the following format:  
 エイリアスを使用するには、作業ディレクトリに以下の形式の device_aliases.json ファイルを作成してください。  
 
 Each key is the alias name, and each value is the actual device ID.  
